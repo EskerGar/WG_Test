@@ -24,8 +24,7 @@ public class MovementController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _input = GetComponent<InputController>();
-        _input.OnSpeedUp += ChangeSpeed;
-        _input.OnSpeedDown += ChangeSpeed;
+        _input.OnSpeedChange += ChangeSpeed;
     }
 
 
