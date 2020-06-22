@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 6792619458980930975}
   - component: {fileID: 3716551392168587635}
   - component: {fileID: 3971049125809806794}
+  - component: {fileID: 8162183718410407517}
+  - component: {fileID: 8014799800295276917}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -142,9 +144,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8d67df040c086441ab32f5ec29a7155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decreaseSpeedValue: 1
-  increaseSpeedValue: 1
-  startingSpeed: 0
+  moveSpeed: 0
+  rotateSpeed: 0
+  speedStep: 0
+  minMoveSpeed: 0
+  maxMoveSpeed: 0
 --- !u!114 &3971049125809806794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,5 +163,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedUp: 273
   speedDown: 274
-  turnRight: 275
-  turnLeft: 276
+  startPlane: 104
+--- !u!114 &8162183718410407517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7500305731856991517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51d4965d0cc948c40887a4a8ab3a766b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planeCount: 5
+--- !u!114 &8014799800295276917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7500305731856991517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1168a6b707e67469d656978e1b26aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabPlane: {fileID: 7869554956994308417, guid: e6935930bb8f5884ab87ab3acab2c384,
+    type: 3}

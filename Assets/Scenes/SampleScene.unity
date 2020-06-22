@@ -381,17 +381,22 @@ PrefabInstance:
     - target: {fileID: 3716551392168587635, guid: e1ecf300f9d46fb4e973126dad27aedf,
         type: 3}
       propertyPath: moveSpeed
-      value: 0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3716551392168587635, guid: e1ecf300f9d46fb4e973126dad27aedf,
         type: 3}
       propertyPath: rotateSpeed
-      value: 1
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 3716551392168587635, guid: e1ecf300f9d46fb4e973126dad27aedf,
         type: 3}
       propertyPath: maxMoveSpeed
-      value: 1
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 3716551392168587635, guid: e1ecf300f9d46fb4e973126dad27aedf,
+        type: 3}
+      propertyPath: speedStep
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6792619458980930975, guid: e1ecf300f9d46fb4e973126dad27aedf,
         type: 3}
