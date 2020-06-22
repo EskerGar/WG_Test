@@ -6,8 +6,11 @@ using UnityEngine;
 public class ShipBehaviour : MonoBehaviour
 {
     [SerializeField] private int planeCount;
+
+    [SerializeField] private float maxPlaneDistance;
     private readonly List<PlaneBehaviour> _planeList = new List<PlaneBehaviour>();
 
+    public float GetMaxPlaneDistance => maxPlaneDistance;
     public event Action OnOverFlowPlanes;
 
     public void AddPlane(PlaneBehaviour plane) => _planeList.Add(plane);

@@ -20,7 +20,7 @@ public class MovementController : MonoBehaviour
         Initialize();
     }
 
-    protected  virtual void Initialize()
+    private void Initialize()
     {
         _rb = GetComponent<Rigidbody2D>();
         _input = GetComponent<InputController>();
