@@ -35,8 +35,8 @@ public class PlaneBehaviour : MonoBehaviour
 
     private bool CheckPos(Vector3 pos)
     {
-        var plane_pos = transform.position;
-        return Mathf.Abs(pos.x) - Mathf.Abs(plane_pos.x) <= .1f && Mathf.Abs(pos.y) - Mathf.Abs(plane_pos.y) <= .1f;
+        var planePos = transform.position;
+        return Mathf.Abs(pos.x) - Mathf.Abs(planePos.x) <= .1f && Mathf.Abs(pos.y) - Mathf.Abs(planePos.y) <= .1f;
     }
 
     private Vector2 RandomizePos()

@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlaneMoveController : MonoBehaviour
 {
     private Rigidbody2D _rb;
-    private float _moveSpeed;
     private float _minMoveSpeed;
     private float _maxMoveSpeed;
     private void Start()
@@ -18,7 +17,6 @@ public class PlaneMoveController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _maxMoveSpeed = 10;
-        _moveSpeed = 100;
     }
 
     public void FollowTo(Vector3 targetPos)
