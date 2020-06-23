@@ -3,27 +3,26 @@ using UnityEngine;
 
 namespace Plane.PlaneStates
 {
-    public class BackState: IState
+    public class EvadeState: IState
     {
         private PlaneBehaviour _owner;
 
-        public BackState(PlaneBehaviour owner)
+        public EvadeState(PlaneBehaviour owner)
         {
             _owner = owner;
-            IsIgnore = true;
+            IsIgnore = false;
         }
+
 
         public bool IsIgnore { get; set; }
 
         public void StateLogic()
         {
-            _owner.Move();
-            _owner.ChangeTarget(_owner.Ship.transform.position, _owner.Ship.GetSpeed);
+            _owner.Evade();
         }
 
         public void StartState()
         {
-            _owner.ChangeTarget(_owner.Ship.transform.position, _owner.Ship.GetSpeed);
         }
 
         public void ExitState()

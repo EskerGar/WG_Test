@@ -25,7 +25,7 @@ namespace Ship
 
         public void AddPlane(PlaneBehaviour plane)
         {
-            plane.OnReadyToFly += AddFreePlane;
+            plane.SubscribeToFly(AddFreePlane);
             _stackPlane.Push(plane);
             _prevPlane = plane;
         }
@@ -44,7 +44,7 @@ namespace Ship
         {
             var plane = GetFreePlane();
             if (plane == null) return; 
-            plane.transform.position += new Vector3(.5f, .5f, 0);
+            plane.transform.position = transform.position + new Vector3(.5f, .5f, 0);
             plane.gameObject.SetActive(true);
             plane.Initialize(ship);
             _prevPlane = plane;

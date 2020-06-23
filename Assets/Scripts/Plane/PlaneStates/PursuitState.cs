@@ -2,19 +2,28 @@
 {
     public class PursuitState: IState
     {
+        public bool IsIgnore { get; set; } = false;
+        private PlaneBehaviour _owner;
+
+        public PursuitState(PlaneBehaviour owner)
+        {
+            _owner = owner;
+        }
+
         public void StateLogic()
         {
-            throw new System.NotImplementedException();
+           _owner.Pursuit();
         }
 
-        public void StateExit()
+        public void StartState()
         {
-            throw new System.NotImplementedException();
+           
         }
 
-        public void StateEnter()
+        public void ExitState()
         {
-            throw new System.NotImplementedException();
+            _owner.ChangeTarget(_owner.PrevTargetPos, _owner.PrevTargetSpeed);
         }
+        
     }
 }

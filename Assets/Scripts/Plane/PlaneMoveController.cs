@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Plane
 {
@@ -26,18 +27,32 @@ namespace Plane
             transform.up = dir;
         }
 
-        public void MoveToTarget(Vector3 target, Vector3 targetSpeed, bool evade)
+        public void MoveToTarget(Vector3 target)
         {
-            Vector2 steering;
-            if(evade)
-                steering = EvadeTarget(target, targetSpeed);
-            else
-                steering =  SlowMoving(target, 5f);
-            steering = Truncate(steering, 10f);
-            steering /= _rb.mass;
-            _rb.velocity = Truncate(_rb.velocity + steering, _maxMoveSpeed);
+            var steering =  SlowMoving(target, 3f);
+            Move(steering, 10f);
         }
-    
+
+        public void EvadeTarget(Vector3 target, Vector3 targetSpeed)
+        {
+            var steering = EvadeTarget(FuturePosition(target, targetSpeed));
+            Move(steering, 50f);
+        }
+
+        public void PursuitTarget(Vector3 target, Vector3 targetSpeed)
+        {
+            var steering =  SlowMoving(FuturePosition(target, targetSpeed), 3f);
+            Move(steering, 10f); 
+        }
+
+        private void Move(Vector2 steering, float maxForce)
+        {
+            steering = Truncate(steering, maxForce);
+            steering /= _rb.mass;
+            _rb.velocity = Truncate(_rb.velocity + steering, _maxMoveSpeed); 
+        }
+
+
         private Vector2 Truncate(Vector2 vec, float max)
         {
             var i = max / vec.magnitude;
@@ -52,12 +67,13 @@ namespace Plane
             return steering;
         }
 
-        private Vector3 EvadeTarget(Vector3 target, Vector3 targetSpeed)
+        private Vector3 EvadeTarget(Vector3 futurePos) => AvoidTarget(futurePos);
+
+        private Vector3 FuturePosition(Vector3 target, Vector3 targetSpeed)
         {
             var distance  = target - transform.position;
             var updatesAhead  = distance.magnitude / _maxMoveSpeed;
-            var futurePosition  = target + targetSpeed * updatesAhead;
-            return AvoidTarget(futurePosition);
+            return  target + targetSpeed * updatesAhead;
         }
 
         private Vector2 SlowMoving(Vector3 target, float slowingRadius)

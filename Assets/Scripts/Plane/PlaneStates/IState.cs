@@ -1,10 +1,12 @@
-﻿namespace Plane.PlaneStates
+﻿using UnityEngine;
+
+namespace Plane.PlaneStates
 {
     public interface IState
     {
+        bool IsIgnore { get; set; }
         void StateLogic();
-        void StateExit();
-        void StateEnter();
-    
+        void StartState();
+        void ExitState();
     }
 }
