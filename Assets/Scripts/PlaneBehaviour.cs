@@ -1,48 +1,81 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(PlaneMoveController))]
 public class PlaneBehaviour : MonoBehaviour
 {
-    private ShipBehaviour _ship;
-    private Vector2 _targetPos;
+    private const float MaxFlyTime = 20f;
+    private const float MaxExistTime = 30f;
+    
+    public Vector2 TargetPos { get; set; }
     private PlaneMoveController _move;
-    private float _maxDistancePos;
+    public float MaxDistancePos { get; private set; }
+    public PlaneBehaviour LastPlane { get; private set; }
+    public float MinDistancePos { get; private set; } = 3;
+    public bool IsReadyToFly { get; set; }
+    public ShipBehaviour Ship { get; private set; }
 
-    public void Initialize(ShipBehaviour ship)
+    private readonly StateMachine _stateMachine = new StateMachine();
+    private Coroutine _flyCoroutine;
+    public event Action<PlaneBehaviour> OnReadyToFly;
+
+    public Vector2 GetSpeed => _move.GetSpeed();
+
+    private void Start()
     {
-        _ship = ship;
-        _targetPos = transform.position;
-        _maxDistancePos = _ship.GetMaxPlaneDistance;
         _move = GetComponent<PlaneMoveController>();
     }
 
+    public void Initialize(ShipBehaviour ship)
+    {
+        Ship = ship;
+        TargetPos = transform.position;
+        MaxDistancePos = Ship.GetMaxPlaneDistance;
+        LastPlane = ship.GetPrevPlane();
+        StartCoroutine(StartFlyingCoroutine());
+    }
+
+    public void Move(Vector3 target, Vector3 moveSpeed, bool isEvade) => _move.MoveToTarget(target, moveSpeed, isEvade);
+
+
     private void FixedUpdate()
     {
-        _move.Move(_targetPos);
-        IdleState(_targetPos);
-
+        _stateMachine.Update();
     }
 
-    private void IdleState(Vector3 pos)
+    private IEnumerator StartFlyingCoroutine()
     {
-        if (!CheckPos(pos)) return;
-        _targetPos = RandomizePos();
-        _move.FollowTo(_targetPos);
+        StartCoroutine(StopFly());
+        while (true)
+        {
+            _flyCoroutine = StartCoroutine(FlyAgainCoroutine());
+            yield return _flyCoroutine;
+        }
     }
 
-    private bool CheckPos(Vector3 pos)
+    private IEnumerator StopFly()
     {
-        var planePos = transform.position;
-        return Mathf.Abs(pos.x) - Mathf.Abs(planePos.x) <= .1f && Mathf.Abs(pos.y) - Mathf.Abs(planePos.y) <= .1f;
+        yield return  new WaitForSeconds(MaxExistTime);
+        StopCoroutine(_flyCoroutine);
+        _stateMachine.ChangeState(new BackState(this));
+        yield return new WaitUntil(() => IsReadyToFly);
+        OnReadyToFly?.Invoke(this);
+        gameObject.SetActive(false);
     }
 
-    private Vector2 RandomizePos()
+    private IEnumerator FlyAgainCoroutine()
     {
-        var shipPos = _ship.transform.position;
-        return new Vector3(Random.Range(shipPos.x - _maxDistancePos, shipPos.x + _maxDistancePos), 
-                           Random.Range(shipPos.y - _maxDistancePos, shipPos.y + _maxDistancePos));
+        IsReadyToFly = false;
+        _stateMachine.ChangeState(new IdleState(this));
+        var randFlyTime = Random.Range(2, MaxFlyTime);
+        yield return new WaitForSeconds(randFlyTime);
+        _stateMachine.ChangeState(new BackState(this));
+        yield return new WaitUntil(() => IsReadyToFly);
+        yield return new WaitForSeconds(2f); // Refueling
     }
+    
 }

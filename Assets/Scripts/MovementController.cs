@@ -15,6 +15,8 @@ public class MovementController : MonoBehaviour
 
     private Rigidbody2D _rb;
     private InputController _input;
+
+    public Vector2 GetSpeed => _rb.velocity;
     private void Start()
     {
         Initialize();
@@ -26,8 +28,7 @@ public class MovementController : MonoBehaviour
         _input = GetComponent<InputController>();
         _input.OnSpeedChange += ChangeSpeed;
     }
-
-
+    
     private void ChangeSpeed(float value)
     {
         moveSpeed += value;
