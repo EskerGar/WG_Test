@@ -6,6 +6,7 @@ namespace Plane.PlaneStates
     public class EvadeState: IState
     {
         private PlaneBehaviour _owner;
+        private GameObject _target;
 
         public EvadeState(PlaneBehaviour owner)
         {

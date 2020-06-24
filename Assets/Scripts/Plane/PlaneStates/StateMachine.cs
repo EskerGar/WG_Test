@@ -9,14 +9,14 @@ namespace Plane.PlaneStates
 
                 public void ChangeState(IState newState)
                 {
-                        //if (_currentState != null && _currentState.GetType() == newState.GetType()) return;
+                        if (_currentState != null && _currentState.GetType() == newState.GetType()) return;
                         _currentState?.ExitState();
                         _prevState = _currentState;
                         _currentState = newState;
                         _currentState.StartState();
                 }
 
-                public void PrevState() => _currentState = _prevState;
+                public void PrevState() => ChangeState(_prevState);
 
                 public void Update() => _currentState?.StateLogic();
 

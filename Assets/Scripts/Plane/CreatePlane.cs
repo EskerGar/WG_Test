@@ -24,6 +24,7 @@ namespace Plane
             var planeBehaviour = plane.GetComponent<PlaneBehaviour>();
             planeBehaviour.Initialize(ship);
             ship.AddPlane(planeBehaviour);
+            _input.OnHuntBegin += planeBehaviour.StartHunt;
         }
     }
 }

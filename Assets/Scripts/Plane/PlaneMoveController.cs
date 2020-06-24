@@ -16,7 +16,8 @@ namespace Plane
         private void Initialize()
         {
             _rb = GetComponent<Rigidbody2D>();
-            _maxMoveSpeed = 5;
+            _maxMoveSpeed = 7;
+            _minMoveSpeed = 3;
         }
 
         public Vector2 GetSpeed() => _rb.velocity;
@@ -30,7 +31,7 @@ namespace Plane
         public void MoveToTarget(Vector3 target)
         {
             var steering =  SlowMoving(target, 3f);
-            Move(steering, 1f);
+            Move(steering, .1f);
         }
 
         public void EvadeTarget(Vector3 target, Vector3 targetSpeed)
@@ -42,7 +43,7 @@ namespace Plane
         public void PursuitTarget(Vector3 target, Vector3 targetSpeed)
         {
             var steering =  SlowMoving(FuturePosition(target, targetSpeed), 3f);
-            Move(steering, 10f); 
+            Move(steering, 1f); 
         }
 
         private void Move(Vector2 steering, float maxForce)
@@ -94,7 +95,9 @@ namespace Plane
             desiredVelocity = distance < slowingRadius
                 ? desiredVelocity.normalized * (_maxMoveSpeed * (distance / slowingRadius))
                 : desiredVelocity.normalized * _maxMoveSpeed;
-                
+
+            if (desiredVelocity.magnitude < _minMoveSpeed)
+                desiredVelocity = desiredVelocity.normalized * _minMoveSpeed;
             return (desiredVelocity - _rb.velocity) ;
         }
     }

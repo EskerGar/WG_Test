@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Plane.PlaneStates;
 using Ship;
 using UnityEngine;
@@ -20,6 +22,7 @@ namespace Plane
         private PlaneFly _planeFly;
         private PlaneMoveController _move;
         private PlaneBehaviour _prevPlane;
+        private Dictionary<GameObject, Vector2> evadeList = new Dictionary<GameObject, Vector2>();
 
         public float Radius { get; private set; }
 
@@ -47,8 +50,16 @@ namespace Plane
         public void Move() => 
             _move.MoveToTarget(TargetPos);
 
-        public void Evade() =>
-            _move.EvadeTarget(TargetPos, TargetSpeed);
+        public void Evade() 
+        {
+            if(evadeList.Count > 0)
+            {
+                var go = evadeList.First();
+                this.ChangeTarget(go.Key.transform.position, go.Value);
+                _move.EvadeTarget(TargetPos, TargetSpeed);
+            }else StateMachine.PrevState();
+            
+        }
         
         public void Pursuit() =>
             _move.PursuitTarget(TargetPos, TargetSpeed);
@@ -59,34 +70,42 @@ namespace Plane
             StateMachine.Update();
         }
 
+        private void Update()
+        { 
+            CheckMaxDist();
+        }
+
+        private void CheckMaxDist()
+        {
+            if(!this.CheckDistance(Ship.transform.position, MaxDistancePos))
+                StateMachine.ChangeState(new IdleState(this));
+        }
+
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (StateMachine.StateIgnoring())
-            {
-                StateMachine.ChangeState(new BackState(this));
-                return;
-            }
+            if (StateMachine.StateIgnoring()) return;
             if(_prevPlane != null && other.gameObject.Equals(_prevPlane.gameObject))
-                this.ChangeTarget(_prevPlane.transform.position, _prevPlane.GetSpeed);
+                evadeList.Add(_prevPlane.gameObject, _prevPlane.GetSpeed);
             if(other.gameObject.Equals(Ship.gameObject))
-                this.ChangeTarget(Ship.transform.position, Ship.GetSpeed);
-            else return;
+                evadeList.Add(Ship.gameObject, Ship.GetSpeed);
             StateMachine.ChangeState(new EvadeState(this));
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if(_prevPlane != null && other.gameObject.Equals(_prevPlane.gameObject))
-                this.ChangeTarget(_prevPlane.transform.position, _prevPlane.GetSpeed);
-            if(other.gameObject.Equals(Ship.gameObject))
-                this.ChangeTarget(Ship.transform.position, Ship.GetSpeed);
-            else return;
-            StateMachine.ChangeState(new IdleState(this));
+            if((_prevPlane != null && other.gameObject.Equals(_prevPlane.gameObject)) || other.gameObject.Equals(Ship.gameObject))
+                evadeList.Remove(other.gameObject);
         }
 
+        public void StartHunt()
+        {
+            StateMachine.ChangeState(new PursuitState(this));
+        }
+        
         private void OnDrawGizmos()
         {
             Gizmos.DrawSphere(TargetPos, .1f);
+            
         }
     }
 }

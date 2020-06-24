@@ -27,7 +27,7 @@ namespace Plane.PlaneStates
 
         public void StartState()
         {
-            if (!_owner.TargetPos.Equals(Vector2.zero)) return;
+            if (!_owner.TargetPos.Equals(_owner.Ship.transform.position)) return;
             _owner.ChangeTarget(RandomizePos(), Vector2.zero);
             _owner.SaveTarget();
         }
@@ -43,8 +43,8 @@ namespace Plane.PlaneStates
             while (true)
             {
                 var shipPos = _owner.Ship.transform.position;
-                x = Random.Range(shipPos.x - _maxDist, shipPos.x + _maxDist);
-                y = Random.Range(shipPos.y - _maxDist, shipPos.y + _maxDist);
+                x = Random.Range(shipPos.x - _maxDist / 2, shipPos.x + _maxDist / 2);
+                y = Random.Range(shipPos.y - _maxDist / 2, shipPos.y + _maxDist / 2);
                 var dist = new Vector2(x - shipPos.x, y - shipPos.y).magnitude;
                 if (!(dist < _owner.Radius + _owner.Ship.GetRadius)) break;
             }

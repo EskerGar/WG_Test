@@ -8,8 +8,8 @@ namespace Plane
 {
     public class PlaneFly
     {
-        private const float MaxFlyTime = 20f;
-        private const float MaxExistTime = 30f;
+        private const float MaxFlyTime = 200f;
+        private const float MaxExistTime = 300f;
         
         private readonly PlaneBehaviour _owner;
         private Coroutine _flyCoroutine;
@@ -48,17 +48,20 @@ namespace Plane
 
         private IEnumerator FlyAgainCoroutine()
         {
-            _stateMachine.ChangeState(new IdleState(_owner));
+            if(_stateMachine.IsPrevStateExist())
+                _stateMachine.PrevState();
+            else
+                _stateMachine.ChangeState(new IdleState(_owner));
             var randFlyTime = Random.Range(10, MaxFlyTime);
             yield return new WaitForSeconds(randFlyTime);
             yield return BackToTheShipCoroutine();
-            yield return new WaitForSeconds(2f); // Refueling
+            yield return new WaitForSeconds(4f); // Refueling
         }
 
         private IEnumerator BackToTheShipCoroutine()
         {
             _stateMachine.ChangeState(new BackState(_owner));
-            yield return new WaitUntil(() => (_owner.Ship.transform.position - _owner.transform.position).magnitude <= .3f);
+            yield return new WaitUntil(() => (_owner.CheckDistance(_owner.Ship.transform.position, .5f)));
         }
     }
 }
