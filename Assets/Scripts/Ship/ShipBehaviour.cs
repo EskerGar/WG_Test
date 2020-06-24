@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Plane;
 using UnityEngine;
 
@@ -17,6 +18,9 @@ namespace Ship
 
         public float GetRadius => _radius;
 
+        public event Action<int> OnCountFreePlaneChanged;
+        public event Action<int> OnCreatePlane; 
+
         private void Start()
         {
             _move = GetComponent<MovementController>();
@@ -24,6 +28,7 @@ namespace Ship
         }
 
         public Vector2 GetSpeed => _move.GetSpeed;
+        
 
         public float GetMaxPlaneDistance => maxPlaneDistance;
 
@@ -32,11 +37,25 @@ namespace Ship
             plane.SubscribeToFly(AddFreePlane);
             _stackPlane.Push(plane);
             _prevPlane = plane;
+            OnCreatePlane?.Invoke(_stackPlane.Count);
         }
 
-        private void AddFreePlane(PlaneBehaviour plane) => _freeStackPlane.Push(plane);
+        private void AddFreePlane(PlaneBehaviour plane) 
+        {
+            _freeStackPlane.Push(plane);
+            OnCountFreePlaneChanged?.Invoke(_freeStackPlane.Count);
+        }
 
-        private PlaneBehaviour GetFreePlane() => _freeStackPlane.Count > 0 ? _freeStackPlane.Pop() : null;
+        private PlaneBehaviour GetFreePlane()
+        {
+            if (_freeStackPlane.Count > 0)
+            {
+                OnCountFreePlaneChanged?.Invoke(_freeStackPlane.Count - 1);
+                return _freeStackPlane.Pop();
+            }
+            OnCountFreePlaneChanged?.Invoke(0);
+            return null;
+        }
 
         public PlaneBehaviour GetPrevPlane()
         {

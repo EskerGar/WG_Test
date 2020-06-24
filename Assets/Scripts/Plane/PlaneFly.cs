@@ -8,8 +8,8 @@ namespace Plane
 {
     public class PlaneFly
     {
-        private const float MaxFlyTime = 200f;
-        private const float MaxExistTime = 300f;
+        private const float MaxFlyTime = 20f;
+        private const float MaxExistTime = 30f;
         
         private readonly PlaneBehaviour _owner;
         private Coroutine _flyCoroutine;

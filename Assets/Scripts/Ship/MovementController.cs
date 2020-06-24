@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Ship
 {
@@ -16,6 +17,8 @@ namespace Ship
         private InputController _input;
 
         public Vector2 GetSpeed => _rb.velocity;
+
+        public event Action<float> OnSpeedChange; 
         private void Start()
         {
             Initialize();
@@ -35,6 +38,7 @@ namespace Ship
                 moveSpeed = maxMoveSpeed;
             else if (moveSpeed < minMoveSpeed)
                 moveSpeed = minMoveSpeed;
+            OnSpeedChange?.Invoke(moveSpeed);
         }
     
         public void Move() => _rb.velocity = transform.up * (moveSpeed * Time.deltaTime);
