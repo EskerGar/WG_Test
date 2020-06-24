@@ -16,7 +16,7 @@ namespace Plane
         private void Initialize()
         {
             _rb = GetComponent<Rigidbody2D>();
-            _maxMoveSpeed = 10;
+            _maxMoveSpeed = 5;
         }
 
         public Vector2 GetSpeed() => _rb.velocity;
@@ -30,13 +30,13 @@ namespace Plane
         public void MoveToTarget(Vector3 target)
         {
             var steering =  SlowMoving(target, 3f);
-            Move(steering, 10f);
+            Move(steering, 1f);
         }
 
         public void EvadeTarget(Vector3 target, Vector3 targetSpeed)
         {
-            var steering = EvadeTarget(FuturePosition(target, targetSpeed));
-            Move(steering, 50f);
+           var steering = EvadeTarget(FuturePosition(target, targetSpeed));
+            Move(steering, 1f);
         }
 
         public void PursuitTarget(Vector3 target, Vector3 targetSpeed)
@@ -52,6 +52,16 @@ namespace Plane
             _rb.velocity = Truncate(_rb.velocity + steering, _maxMoveSpeed); 
         }
 
+        private Vector3 Kasatelnaya(Vector3 target)
+        {
+            var desiredVelocity = (transform.position - target).normalized * _maxMoveSpeed;
+            var kas = new Vector2(desiredVelocity.y, desiredVelocity.x);
+            if (Vector2.Dot(kas, _rb.velocity) < 0)
+                kas = -kas;
+            var steering = (kas - _rb.velocity) ;
+            return steering;
+        }
+
 
         private Vector2 Truncate(Vector2 vec, float max)
         {
@@ -63,11 +73,11 @@ namespace Plane
         private Vector3 AvoidTarget(Vector3 target)
         {
             Vector2 desiredVelocity = (transform.position - target).normalized * _maxMoveSpeed;
-            var steering = (desiredVelocity - _rb.velocity) * Time.deltaTime;
+            var steering = (desiredVelocity - _rb.velocity) ;
             return steering;
         }
 
-        private Vector3 EvadeTarget(Vector3 futurePos) => AvoidTarget(futurePos);
+        private Vector3 EvadeTarget(Vector3 futurePos) => Kasatelnaya(futurePos);
 
         private Vector3 FuturePosition(Vector3 target, Vector3 targetSpeed)
         {
@@ -84,8 +94,8 @@ namespace Plane
             desiredVelocity = distance < slowingRadius
                 ? desiredVelocity.normalized * (_maxMoveSpeed * (distance / slowingRadius))
                 : desiredVelocity.normalized * _maxMoveSpeed;
-
-            return (desiredVelocity - _rb.velocity) * Time.deltaTime;
+                
+            return (desiredVelocity - _rb.velocity) ;
         }
     }
 }

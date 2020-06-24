@@ -13,10 +13,14 @@ namespace Ship
         private readonly Stack<PlaneBehaviour> _freeStackPlane = new Stack<PlaneBehaviour>();
         private MovementController _move;
         private PlaneBehaviour _prevPlane;
+        private float _radius;
+
+        public float GetRadius => _radius;
 
         private void Start()
         {
             _move = GetComponent<MovementController>();
+            _radius = GetComponent<CircleCollider2D>().radius;
         }
 
         public Vector2 GetSpeed => _move.GetSpeed;

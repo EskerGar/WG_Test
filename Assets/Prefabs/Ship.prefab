@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 3971049125809806794}
   - component: {fileID: 8162183718410407517}
   - component: {fileID: 8014799800295276917}
-  - component: {fileID: 6246891171851625096}
-  m_Layer: 9
+  - component: {fileID: 424508656500049253}
+  m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,8 +118,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabPlane: {fileID: 7869554956994308417, guid: e6935930bb8f5884ab87ab3acab2c384,
     type: 3}
---- !u!70 &6246891171851625096
-CapsuleCollider2D:
+--- !u!58 &424508656500049253
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -131,9 +131,9 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.013589621, y: 0.008157253}
-  m_Size: {x: 2.9189925, y: 1.4622462}
-  m_Direction: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.75
 --- !u!1 &8784388000406653521
 GameObject:
   m_ObjectHideFlags: 0
