@@ -6,7 +6,9 @@ namespace Plane.PlaneStates
     {
         bool IsIgnore { get; set; }
         bool IsCanBePrev { get; set; }
-        void StateLogic();
+        void StateLogicFixedUpdate();
+
+        void StateLogicUpdate();
         void StartState();
         void ExitState();
         string GetStateName();

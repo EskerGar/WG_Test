@@ -21,27 +21,39 @@ namespace Plane
         private PlaneFly _planeFly;
         private PlaneMoveController _move;
         private PlaneBehaviour _prevPlane;
+        private Rigidbody2D _rb;
         private Dictionary<GameObject, Vector2> evadeList = new Dictionary<GameObject, Vector2>();
-        private bool _isHuntActive;
+        private Camera _cam;
+        public bool IsHuntActive { get; set; }
 
         public float Radius { get; private set; }
 
         public float MaxDistancePos { get; private set; }
 
         private Vector2 GetSpeed => _move.GetSpeed();
+        public Rigidbody2D GetRb => _rb;
         private void Awake()
         {
             _move = GetComponent<PlaneMoveController>();
             Radius = GetComponent<CircleCollider2D>().radius;
+            _rb = GetComponent<Rigidbody2D>();
+            _cam = Camera.main;
         }
 
-        public void Initialize(ShipBehaviour ship)
+        public void Initialize(ShipBehaviour ship, PlaneConfig configs)
         {
             Ship = ship;
+            _move.Initialize(configs.GetMaxMoveSpeed, configs.GetMinMoveSpeed, configs.GetAngularSpeed);
             if(_planeFly == null)
                 _planeFly = new PlaneFly(this);
-            _prevPlane = Ship.GetPrevPlane();
             MaxDistancePos = Ship.GetMaxPlaneDistance;
+            RestartPlane();
+        }
+
+        public void RestartPlane()
+        {
+            _prevPlane = Ship.GetPrevPlane();
+            IsHuntActive = false;
             _planeFly.StartFly();
         }
         public void SubscribeToState(Action<IState> method) => StateMachine.OnStateChange += method;
@@ -67,11 +79,12 @@ namespace Plane
 
         private void FixedUpdate()
         {
-            StateMachine.Update();
+            StateMachine.FixedUpdate();
         }
 
         private void Update()
         { 
+            StateMachine.Update();
             CheckMaxDist();
         }
 
@@ -101,16 +114,14 @@ namespace Plane
         public void StartHunt()
         {
             if (StateMachine.StateIgnoring()) return;
-            if (!_isHuntActive)
+            if (!IsHuntActive)
             {
-                _isHuntActive = true;
-                StateMachine.ChangeState(new PursuitState(this));
+                StateMachine.ChangeState(new PursuitState(this, _cam));
             }
             else
             {
                 if (!StateMachine.PrevState())
                     StateMachine.ChangeState(new IdleState(this));
-                _isHuntActive = false;
             }
         }
 

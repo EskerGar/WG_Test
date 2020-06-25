@@ -11,15 +11,20 @@ namespace Plane.PlaneStates
         {
             _owner = owner;
             IsIgnore = true;
-            IsCanBePrev = true;
+            IsCanBePrev = false;
         }
 
         public bool IsIgnore { get; set; }
         public bool IsCanBePrev { get; set; }
 
-        public void StateLogic()
+        public void StateLogicFixedUpdate()
         {
             _owner.Move();
+            
+        }
+
+        public void StateLogicUpdate()
+        {
             _owner.ChangeTarget(_owner.Ship.transform.position, _owner.Ship.GetSpeed);
         }
 

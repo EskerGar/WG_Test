@@ -20,9 +20,13 @@ namespace Plane.PlaneStates
         public bool IsIgnore { get; set; }
         public bool IsCanBePrev { get; set; }
 
-        public void StateLogic()
+        public void StateLogicFixedUpdate()
         {
             _owner.Move();
+        }
+
+        public void StateLogicUpdate()
+        {
             if (!_owner.CheckDistance(_owner.TargetPos, .7f)) return;
             _owner.ChangeTarget(RandomizePos(), Vector2.zero);
             _owner.SaveTarget();

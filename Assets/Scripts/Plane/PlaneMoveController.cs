@@ -8,19 +8,16 @@ namespace Plane
         private Rigidbody2D _rb;
         private float _minMoveSpeed;
         private float _maxMoveSpeed;
+        private float _angularSpeed;
 
-        public event Action<float> OnSpeedChange; 
-        
-        private void Start()
-        {
-            Initialize();
-        }
+        public event Action<float> OnSpeedChange;
 
-        private void Initialize()
+        public void Initialize(float maxMoveSpeed, float minMoveSpeed, float angularSpeed)
         {
             _rb = GetComponent<Rigidbody2D>();
-            _maxMoveSpeed = 7;
-            _minMoveSpeed = 3;
+            _maxMoveSpeed = maxMoveSpeed;
+            _minMoveSpeed = minMoveSpeed;
+            _angularSpeed = angularSpeed;
         }
 
         public Vector2 GetSpeed() => _rb.velocity;

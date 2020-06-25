@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -724,7 +724,7 @@ PrefabInstance:
     - target: {fileID: 8264263547391420362, guid: 9bccfbad0bd1cff41b2467cd431f90fd,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.5999985
+      value: 0.6000061
       objectReference: {fileID: 0}
     - target: {fileID: 8264263547391420362, guid: 9bccfbad0bd1cff41b2467cd431f90fd,
         type: 3}
@@ -911,6 +911,12 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 8014799800295276917, guid: e1ecf300f9d46fb4e973126dad27aedf,
+        type: 3}
+      propertyPath: configs
+      value: 
+      objectReference: {fileID: 11400000, guid: 0345a8c925f1f00448525cee748ff52e,
+        type: 2}
     - target: {fileID: 8162183718410407517, guid: e1ecf300f9d46fb4e973126dad27aedf,
         type: 3}
       propertyPath: maxPlaneDistance

@@ -66,7 +66,7 @@ namespace Ship
             if (plane == null) return; 
             plane.transform.position = transform.position + new Vector3(.5f, .5f, 0);
             plane.gameObject.SetActive(true);
-            plane.Initialize(ship);
+            plane.RestartPlane();
             _prevPlane = plane;
         }
 

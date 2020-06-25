@@ -19,9 +19,13 @@ namespace Plane.PlaneStates
         public bool IsIgnore { get; set; }
         public bool IsCanBePrev { get; set; }
 
-        public void StateLogic()
+        public void StateLogicFixedUpdate()
         {
             _owner.Evade();
+        }
+
+        public void StateLogicUpdate()
+        {
         }
 
         public void StartState()

@@ -50,10 +50,11 @@ namespace Plane
         {
             if(!_stateMachine.PrevState())
                 _stateMachine.ChangeState(new IdleState(_owner));
-            var randFlyTime = Random.Range(10, MaxFlyTime);
+            var randFlyTime = Random.Range(5, MaxFlyTime);
             yield return new WaitForSeconds(randFlyTime);
             yield return BackToTheShipCoroutine();
-            yield return new WaitForSeconds(4f); // Refueling
+            _stateMachine.ChangeState(new RefuelState(_owner));
+            yield return new WaitForSeconds(2f); // Refueling
         }
 
         private IEnumerator BackToTheShipCoroutine()

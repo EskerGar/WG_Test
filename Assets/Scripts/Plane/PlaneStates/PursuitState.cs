@@ -7,32 +7,40 @@ namespace Plane.PlaneStates
         public bool IsIgnore { get; set; } = false;
         public bool IsCanBePrev { get; set; }
         private PlaneBehaviour _owner;
+        private Vector2 _prevPos = Vector2.zero;
+        private Camera _cam;
 
-        public PursuitState(PlaneBehaviour owner)
+        public PursuitState(PlaneBehaviour owner, Camera cam)
         {
             _owner = owner;
             IsCanBePrev = true;
+            _cam = cam;
         }
 
-        public void StateLogic()
+        public void StateLogicFixedUpdate()
         {
-            var prevPos = Vector3.one;
-           _owner.Pursuit();
-           var mousePos = Input.mousePosition;
-           mousePos.z = 10;
-           mousePos = Camera.main.ScreenToWorldPoint (mousePos);
-           var speed = ((Vector2)mousePos - (Vector2)prevPos);
-           prevPos = mousePos;
-           _owner.ChangeTarget(mousePos, speed);
+            _owner.Pursuit();
+           
+        }
+
+        public void StateLogicUpdate()
+        {
+            var mousePos = Input.mousePosition;
+            mousePos.z = 10;
+            mousePos = _cam.ScreenToWorldPoint (mousePos);
+            var speed = ((Vector2)mousePos - _prevPos);
+            _prevPos = mousePos;
+            _owner.ChangeTarget(mousePos, speed); 
         }
 
         public void StartState()
         {
-           
+            _owner.IsHuntActive = true;
         }
 
         public void ExitState()
         {
+            _owner.IsHuntActive = false;
         }
 
         public string GetStateName() => "Pursuit";
