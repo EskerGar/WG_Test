@@ -12,10 +12,12 @@ namespace Plane.PlaneStates
         {
             _owner = owner;
             IsIgnore = false;
+            IsCanBePrev = false;
         }
 
 
         public bool IsIgnore { get; set; }
+        public bool IsCanBePrev { get; set; }
 
         public void StateLogic()
         {
@@ -30,5 +32,7 @@ namespace Plane.PlaneStates
         {
             _owner.ChangeTarget(_owner.PrevTargetPos, _owner.PrevTargetSpeed);
         }
+
+        public string GetStateName() => "Evade";
     }
 }

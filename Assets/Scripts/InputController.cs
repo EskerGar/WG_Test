@@ -10,10 +10,12 @@ public class InputController : MonoBehaviour
     [SerializeField] private KeyCode speedDown = KeyCode.DownArrow;
     [SerializeField] private KeyCode startPlane = KeyCode.H;
     [SerializeField] private KeyCode startHunt = KeyCode.G;
+    [SerializeField] private KeyCode showPlaneInfo = KeyCode.E;
     private MovementController _move;
     private ShipBehaviour _ship;
     public event Action<float> OnSpeedChange;
     public event Action<ShipBehaviour> OnPlaneStart;
+    public event Action OnShowInfo;
 
     public event Action OnHuntBegin;
     private float Rotation => Input.GetAxis("Horizontal");
@@ -35,8 +37,11 @@ public class InputController : MonoBehaviour
         if(Input.GetKeyDown(startPlane))
             OnPlaneStart?.Invoke(_ship);
         
-        if(Input.GetKeyDown(KeyCode.G))
+        if(Input.GetKeyDown(startHunt))
             OnHuntBegin?.Invoke();
+
+        if(Input.GetKeyDown(showPlaneInfo))
+            OnShowInfo?.Invoke();
     }
 
     private void FixedUpdate()

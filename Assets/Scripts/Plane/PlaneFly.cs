@@ -48,9 +48,7 @@ namespace Plane
 
         private IEnumerator FlyAgainCoroutine()
         {
-            if(_stateMachine.IsPrevStateExist())
-                _stateMachine.PrevState();
-            else
+            if(!_stateMachine.PrevState())
                 _stateMachine.ChangeState(new IdleState(_owner));
             var randFlyTime = Random.Range(10, MaxFlyTime);
             yield return new WaitForSeconds(randFlyTime);

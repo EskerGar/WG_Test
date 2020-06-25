@@ -8,6 +8,9 @@ namespace Plane
         private Rigidbody2D _rb;
         private float _minMoveSpeed;
         private float _maxMoveSpeed;
+
+        public event Action<float> OnSpeedChange; 
+        
         private void Start()
         {
             Initialize();
@@ -51,6 +54,7 @@ namespace Plane
             steering = Truncate(steering, maxForce);
             steering /= _rb.mass;
             _rb.velocity = Truncate(_rb.velocity + steering, _maxMoveSpeed); 
+            OnSpeedChange?.Invoke(_rb.velocity.magnitude);
         }
 
         private Vector3 Kasatelnaya(Vector3 target)

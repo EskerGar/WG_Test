@@ -40,9 +40,10 @@ namespace Ship
                 moveSpeed = minMoveSpeed;
             OnSpeedChange?.Invoke(moveSpeed);
         }
+        
     
-        public void Move() => _rb.velocity = transform.up * (moveSpeed * Time.deltaTime);
+        public void Move() => _rb.velocity = transform.up * (moveSpeed);
 
-        public void Rotate(float moveVector) => _rb.rotation += ( rotateSpeed * moveVector * Time.deltaTime);
+        public void Rotate(float moveVector) => _rb.rotation += ( rotateSpeed * moveVector);
     }
 }

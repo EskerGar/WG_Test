@@ -1,4 +1,5 @@
-﻿using Ship;
+﻿using System;
+using Ship;
 using UnityEngine;
 
 namespace Plane
@@ -7,6 +8,7 @@ namespace Plane
     {
         [SerializeField] private GameObject prefabPlane;
         private InputController _input;
+        public event Action<PlaneBehaviour> OnNewPlane; 
         private void Start()
         {
             _input = GetComponent<InputController>();
@@ -24,6 +26,7 @@ namespace Plane
             var planeBehaviour = plane.GetComponent<PlaneBehaviour>();
             planeBehaviour.Initialize(ship);
             ship.AddPlane(planeBehaviour);
+            OnNewPlane?.Invoke(planeBehaviour);
             _input.OnHuntBegin += planeBehaviour.StartHunt;
         }
     }

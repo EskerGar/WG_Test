@@ -14,9 +14,12 @@ namespace Plane.PlaneStates
             _owner = owner;
             _maxDist = owner.MaxDistancePos;
             IsIgnore = false;
+            IsCanBePrev = true;
         }
 
         public bool IsIgnore { get; set; }
+        public bool IsCanBePrev { get; set; }
+
         public void StateLogic()
         {
             _owner.Move();
@@ -35,6 +38,8 @@ namespace Plane.PlaneStates
         public void ExitState()
         {
         }
+
+        public string GetStateName() => "Idle";
 
         private Vector2 RandomizePos()
         {

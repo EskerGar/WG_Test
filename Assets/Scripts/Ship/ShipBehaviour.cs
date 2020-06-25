@@ -17,7 +17,9 @@ namespace Ship
         private float _radius;
 
         public float GetRadius => _radius;
-
+        public Vector2 GetSpeed => _move.GetSpeed;
+        public float GetMaxPlaneDistance => maxPlaneDistance;
+        public int GetPlaneCount => planeCount;
         public event Action<int> OnCountFreePlaneChanged;
         public event Action<int> OnCreatePlane; 
 
@@ -26,11 +28,6 @@ namespace Ship
             _move = GetComponent<MovementController>();
             _radius = GetComponent<CircleCollider2D>().radius;
         }
-
-        public Vector2 GetSpeed => _move.GetSpeed;
-        
-
-        public float GetMaxPlaneDistance => maxPlaneDistance;
 
         public void AddPlane(PlaneBehaviour plane)
         {

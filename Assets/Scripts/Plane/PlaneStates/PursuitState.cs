@@ -5,16 +5,18 @@ namespace Plane.PlaneStates
     public class PursuitState: IState
     {
         public bool IsIgnore { get; set; } = false;
+        public bool IsCanBePrev { get; set; }
         private PlaneBehaviour _owner;
-        private Vector3 prevPos = Vector3.one;
 
         public PursuitState(PlaneBehaviour owner)
         {
             _owner = owner;
+            IsCanBePrev = true;
         }
 
         public void StateLogic()
         {
+            var prevPos = Vector3.one;
            _owner.Pursuit();
            var mousePos = Input.mousePosition;
            mousePos.z = 10;
@@ -32,6 +34,7 @@ namespace Plane.PlaneStates
         public void ExitState()
         {
         }
-        
+
+        public string GetStateName() => "Pursuit";
     }
 }

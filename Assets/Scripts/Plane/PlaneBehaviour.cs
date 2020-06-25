@@ -5,7 +5,6 @@ using System.Linq;
 using Plane.PlaneStates;
 using Ship;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Plane
 {
@@ -23,6 +22,7 @@ namespace Plane
         private PlaneMoveController _move;
         private PlaneBehaviour _prevPlane;
         private Dictionary<GameObject, Vector2> evadeList = new Dictionary<GameObject, Vector2>();
+        private bool _isHuntActive;
 
         public float Radius { get; private set; }
 
@@ -44,7 +44,7 @@ namespace Plane
             MaxDistancePos = Ship.GetMaxPlaneDistance;
             _planeFly.StartFly();
         }
-
+        public void SubscribeToState(Action<IState> method) => StateMachine.OnStateChange += method;
         public void SubscribeToFly(Action<PlaneBehaviour> method) => _planeFly.OnReadyToFly += method;
 
         public void Move() => 
@@ -77,6 +77,7 @@ namespace Plane
 
         private void CheckMaxDist()
         {
+            if (StateMachine.StateIgnoring()) return;
             if(!this.CheckDistance(Ship.transform.position, MaxDistancePos))
                 StateMachine.ChangeState(new IdleState(this));
         }
@@ -99,12 +100,23 @@ namespace Plane
 
         public void StartHunt()
         {
-            StateMachine.ChangeState(new PursuitState(this));
+            if (StateMachine.StateIgnoring()) return;
+            if (!_isHuntActive)
+            {
+                _isHuntActive = true;
+                StateMachine.ChangeState(new PursuitState(this));
+            }
+            else
+            {
+                if (!StateMachine.PrevState())
+                    StateMachine.ChangeState(new IdleState(this));
+                _isHuntActive = false;
+            }
         }
-        
+
         private void OnDrawGizmos()
         {
-            Gizmos.DrawSphere(TargetPos, .1f);
+            Gizmos.DrawSphere(TargetPos, 1f);
             
         }
     }
