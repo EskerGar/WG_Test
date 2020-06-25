@@ -8,7 +8,7 @@ namespace Plane
         private Rigidbody2D _rb;
         private float _minMoveSpeed;
         private float _maxMoveSpeed;
-        private float _angularSpeed;
+        private float _maxAngularSpeed;
 
         public event Action<float> OnSpeedChange;
 
@@ -17,15 +17,22 @@ namespace Plane
             _rb = GetComponent<Rigidbody2D>();
             _maxMoveSpeed = maxMoveSpeed;
             _minMoveSpeed = minMoveSpeed;
-            _angularSpeed = angularSpeed;
+            _maxAngularSpeed = angularSpeed;
         }
 
         public Vector2 GetSpeed() => _rb.velocity;
 
-        public void FollowTo(Vector3 targetPos)
+        private void FollowTo()
         {
-            var dir = (targetPos - transform.position).normalized;
-            transform.up = dir;
+            _rb.AddTorque(Vector2.SignedAngle(transform.up, _rb.velocity));
+            if(((Vector2)transform.up - _rb.velocity).sqrMagnitude < 0.2 * 0.2)
+            {
+                _rb.angularVelocity = 0;
+            }
+            if (_rb.angularVelocity > _maxAngularSpeed)
+                _rb.angularVelocity = _maxAngularSpeed;
+            if (_rb.angularVelocity < -_maxAngularSpeed)
+                _rb.angularDrag = -_maxAngularSpeed;
         }
 
         public void MoveToTarget(Vector3 target)
@@ -51,10 +58,11 @@ namespace Plane
             steering = Truncate(steering, maxForce);
             steering /= _rb.mass;
             _rb.velocity = Truncate(_rb.velocity + steering, _maxMoveSpeed); 
+            FollowTo();
             OnSpeedChange?.Invoke(_rb.velocity.magnitude);
         }
 
-        private Vector3 Kasatelnaya(Vector3 target)
+        private Vector3 AvoidTarget(Vector3 target)
         {
             var desiredVelocity = (transform.position - target).normalized * _maxMoveSpeed;
             var kas = new Vector2(desiredVelocity.y, desiredVelocity.x);
@@ -72,14 +80,7 @@ namespace Plane
             return vec * i;
         }
 
-        private Vector3 AvoidTarget(Vector3 target)
-        {
-            Vector2 desiredVelocity = (transform.position - target).normalized * _maxMoveSpeed;
-            var steering = (desiredVelocity - _rb.velocity) ;
-            return steering;
-        }
-
-        private Vector3 EvadeTarget(Vector3 futurePos) => Kasatelnaya(futurePos);
+        private Vector3 EvadeTarget(Vector3 futurePos) => AvoidTarget(futurePos);
 
         private Vector3 FuturePosition(Vector3 target, Vector3 targetSpeed)
         {
@@ -93,13 +94,13 @@ namespace Plane
             Vector2 desiredVelocity = target - transform.position;
             var distance = desiredVelocity.magnitude;
 
-            desiredVelocity = distance < slowingRadius
+            var velocity = distance < slowingRadius
                 ? desiredVelocity.normalized * (_maxMoveSpeed * (distance / slowingRadius))
                 : desiredVelocity.normalized * _maxMoveSpeed;
 
-            if (desiredVelocity.magnitude < _minMoveSpeed)
-                desiredVelocity = desiredVelocity.normalized * _minMoveSpeed;
-            return (desiredVelocity - _rb.velocity) ;
+            if (velocity.magnitude < _minMoveSpeed)
+                velocity = desiredVelocity.normalized * _minMoveSpeed;
+            return (velocity - _rb.velocity) ;
         }
     }
 }

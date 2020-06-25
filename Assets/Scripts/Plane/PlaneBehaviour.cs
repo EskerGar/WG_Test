@@ -79,6 +79,7 @@ namespace Plane
 
         private void FixedUpdate()
         {
+            
             StateMachine.FixedUpdate();
         }
 
