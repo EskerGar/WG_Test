@@ -1,3 +1,4 @@
 Arrows - Ship control;
 H - release a plane;
-G - start pursuit regime;
+G - start mouse pursuit regime;
+E - Show/Hide Plane Info;
