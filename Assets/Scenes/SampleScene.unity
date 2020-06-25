@@ -831,6 +831,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 150651174198149815, guid: e1ecf300f9d46fb4e973126dad27aedf,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 150651174198149815, guid: e1ecf300f9d46fb4e973126dad27aedf,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 424508656500049253, guid: e1ecf300f9d46fb4e973126dad27aedf,
         type: 3}
       propertyPath: m_IsTrigger
@@ -874,12 +884,12 @@ PrefabInstance:
     - target: {fileID: 3716551392168587635, guid: e1ecf300f9d46fb4e973126dad27aedf,
         type: 3}
       propertyPath: maxMoveSpeed
-      value: 10
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3716551392168587635, guid: e1ecf300f9d46fb4e973126dad27aedf,
         type: 3}
       propertyPath: speedStep
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6792619458980930975, guid: e1ecf300f9d46fb4e973126dad27aedf,
         type: 3}
